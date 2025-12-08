@@ -11,24 +11,8 @@ You need to install Git for Windows (https://git-scm.com/downloads/win). This gi
 
 All instructions can only be done in the Git Bash terminal.
 
-# Diff Procedure
-You need GNU diff from `diffutils` or `busybox` or `toybox`. Git diff is not supported as it does not produce interoperable patch file. Please only perform this on Linux.
-
-Starts with the original ver 1.00 directory for each game (or the oldest patchable version that is available).
-
-1. Recursively rename all file extension to lowercase (See relevant section below)
-2. Create a copy of the game directory to be patched
-3. Drop ZUN executable patch into game directory
-4. Run ZUN executable patch to completion through WINE 32-bit (with `LC_ALL=ja_JP.UTF-8`, you may also need system JP locale installed)
-5. Remove ZUN executable patch from the game directory
-6. Generate diff via `diff -Naur before-patch/ after-patch/ > patch_name.diff`
-
-This process is repeated between each patch stage until the latest version is reached. Contributors should follow the same procedure.
-
-The diff file should be named after the name of the ZUN executable patch minus the `.exe` extension. For example, changes made by running `kouma_update102f.EXE` should make the resulting diff be named `kouma_update102f.diff`. Normalization of diff file naming like this allows for search or listing of diff files to yield a correct order to apply patches.
-
 # Patch Procedure
-Only applies if you have the original JP game directory, pre-patched one may not work!
+Only applies if you have the original JP game directory, pre-patched one may not work! Unless specified otherwise within the README of each patch folder.
 
 ### Using patch script (recommended)
 There is an interactive bash script `patch.sh` for the patch procedure. Simply make the script executable and run it in the terminal and follow instructions.
@@ -61,6 +45,23 @@ In case there were bad patches applied and it left a bunch of reject files, simp
 ```sh
 find directory_with_bad_patch/ -name '*.rej' -exec rm {} \;
 ```
+
+# Diff Procedure
+You need GNU diff from `diffutils` or `busybox` or `toybox`. Git diff is not supported as it does not produce interoperable patch file. Please only perform this on Linux.
+
+Starts with the original ver 1.00 directory for each game (or the oldest patchable version that is available).
+
+1. Recursively rename all file extension to lowercase (See relevant section below)
+2. Create a copy of the game directory to be patched
+3. Drop ZUN executable patch into game directory
+4. Run ZUN executable patch to completion through WINE 32-bit (with `LC_ALL=ja_JP.UTF-8`, you may also need system JP locale installed)
+5. Remove ZUN executable patch from the game directory
+6. Generate diff via `diff -Naur before-patch/ after-patch/ > patch_name.diff`
+
+This process is repeated between each patch stage until the latest version is reached. Contributors should follow the same procedure.
+
+The diff file should be named after the name of the ZUN executable patch minus the `.exe` extension. For example, changes made by running `kouma_update102f.EXE` should make the resulting diff be named `kouma_update102f.diff`. Normalization of diff file naming like this allows for search or listing of diff files to yield a correct order to apply patches.
+
 
 ## Recursively rename file extension to lowercase
 Sometimes, the file extension in the game directory is a mix of uppercase and lowercase. This behavior is first observed in th06 EoSD disc, where the on-disc directory has uppercase .DAT filename extension. But if the game was installed by running `install.exe` instead of just copying the game directory, then the .DAT filename extension were lowercase to .dat instead. Since diff/patch and linux are case-sensitive in most context, this requires normalizing all file extension to lowercase.
